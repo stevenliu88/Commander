@@ -8,13 +8,13 @@ namespace Commander.Data
 {
     public class MockCommanderRepo : ICommanderRepo
     {
-        public IEnumerable<Command> GetAppCommanders()
+        public IEnumerable<Command> GetAllCommanders()
         {
-            var commands = new List<Command> 
+            var commands = new List<Command>
             {
                 new Command { Id = 0, HowTo = "Boil an egg", Line = "Boil water", Platform = "Kettle" },
-                new Command { Id = 0, HowTo = "Cut bread", Line = "Get a knife", Platform = "chopping" },
-                new Command { Id = 0, HowTo = "cooking", Line = "teabag", Platform = "testing" }
+                new Command { Id = 1, HowTo = "Cut bread", Line = "Get a knife", Platform = "chopping" },
+                new Command { Id = 2, HowTo = "cooking", Line = "teabag", Platform = "testing" }
             };
 
             return commands;
