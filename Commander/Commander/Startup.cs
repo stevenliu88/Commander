@@ -1,3 +1,4 @@
+using AutoMapper;
 using Commander.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,7 +29,8 @@ namespace Commander
         {
             services.AddDbContext<CommandContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnections")));
             services.AddControllers();
-            services.AddScoped<ICommanderRepo, MockCommanderRepo>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddScoped<ICommanderRepo, SqlCommanderRepo>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
