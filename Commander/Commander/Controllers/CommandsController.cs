@@ -41,5 +41,21 @@ namespace Commander.Controllers
             }
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("CreateCommand")]
+        public ActionResult<CommandReadDto> CreateCommand(CommandCreateDto cmd) 
+        {
+            var CommandModel = _mapper.Map<Command>(cmd);
+             _repo.CreateCommand(CommandModel);
+            var result = _repo.SaveChanges();
+
+            var commandReadDto = _mapper.Map<CommandReadDto>(CommandModel);
+            if (result) 
+            {
+                return CreatedAtRoute(nameof(GetCommandById), new { Id = commandReadDto.Id}, commandReadDto);
+            }
+            return BadRequest();
+        }
     }
 }
