@@ -2,6 +2,7 @@
 using Commander.Data;
 using Commander.Dtos;
 using Commander.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -57,5 +58,62 @@ namespace Commander.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPut]
+        [Route("UpdateCommand/{Id}")]
+        public ActionResult UpdateCommand(int Id, CommandUpdateDto cmd) 
+        {
+            var command = _repo.GetCommandById(Id);
+            if (command != null) 
+            {
+                 _mapper.Map(cmd, command);
+                _repo.SaveChanges();
+                return NoContent();
+            }
+
+            return NotFound();
+        }
+
+        [HttpPatch]
+        [Route("PartialUpdateCommand/{Id}")]
+        public ActionResult PartialUpdateCommand(int Id, JsonPatchDocument<CommandUpdateDto> patchDoc) 
+        {
+            var command = _repo.GetCommandById(Id);
+            if (command == null) {
+                return NotFound();
+            }
+
+            var commandToPatch = _mapper.Map<CommandUpdateDto>(command);
+
+            patchDoc.ApplyTo(commandToPatch, ModelState);
+
+            if (!TryValidateModel(ModelState)) {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(commandToPatch, command);
+
+            _repo.SaveChanges();
+
+            return NoContent();
+
+        }
+
+        [HttpDelete]
+        [Route("DeleteCommand/{Id}")]
+        public ActionResult DeleteCommand(int Id) 
+        {
+            var command = _repo.GetCommandById(Id);
+            if (command == null) {
+                return BadRequest();
+            }
+
+            _repo.DeleteCommand(command);
+            _repo.SaveChanges();
+            return NoContent();
+
+
+        }
+
     }
 }

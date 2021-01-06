@@ -25,6 +25,13 @@ namespace Commander.Data
             _commandContext.Add(cmd);
         }
 
+        public void DeleteCommand(Command cmd)
+        {
+            if (cmd == null) {
+                throw new ArgumentNullException();
+            }
+            _commandContext.Remove(cmd);
+        }
 
         public IEnumerable<Command> GetAllCommanders()
         {
@@ -40,6 +47,12 @@ namespace Commander.Data
         public bool SaveChanges()
         {
             return (_commandContext.SaveChanges() >= 0);
+        }
+
+        public void UpdateCommand(Command cmd)
+        {
+            // Nothing
+            _commandContext.Update(cmd);
         }
     }
 }
